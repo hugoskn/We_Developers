@@ -1,51 +1,33 @@
-﻿import { useEffect, useState } from 'react';
-import './App.css';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router';
+import LandingPage from './Pages/PublicFacing/LandingPage';
+import SignInSignUpPage from './Pages/PublicFacing/SignInSignUpPage';
+import ResetPasswordPage from './Pages/PublicFacing/ResetPasswordPage';
+import MainPage from './Pages/Platform/MainPage';
+import PrivacyPolicyPage from './Pages/PublicFacing/PrivacyPolicyPage';
+import TermsAndConditionsPage from './Pages/PublicFacing/TermsAndConditionsPage';
+
+function PrivateRoute({ children }) {
+    const token = localStorage.getItem('authToken');
+    return token ? children : <Navigate to="/account" replace />;
+}
 
 function App() {
-    const [forecasts, setForecasts] = useState();
-
-    useEffect(() => {
-        populateWeatherData();
-    }, []);
-
-    const contents = forecasts === undefined
-        ? <p><em>Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationreact">https://aka.ms/jspsintegrationreact</a> for more details.</em></p>
-        : <table className="table table-striped" aria-labelledby="tableLabel">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Temp. (C)</th>
-                    <th>Temp. (F)</th>
-                    <th>Summary</th>
-                </tr>
-            </thead>
-            <tbody>
-                {forecasts.map(forecast =>
-                    <tr key={forecast.date}>
-                        <td>{forecast.date}</td>
-                        <td>{forecast.temperatureC}</td>
-                        <td>{forecast.temperatureF}</td>
-                        <td>{forecast.summary}</td>
-                    </tr>
-                )}
-            </tbody>
-        </table>;
-
     return (
-        <div>
-            <h1 id="tableLabel">Weather forecast</h1>
-            <p>This component demonstrates fetching data from the server.</p>
-            {contents}
-        </div>
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/account" element={<SignInSignUpPage />} />
+                <Route path="/reset-password" element={<ResetPasswordPage />} />
+                <Route path="/main" element={
+                    <PrivateRoute>
+                        <MainPage />
+                    </PrivateRoute>
+                } />
+                <Route path="/privacy" element={<PrivacyPolicyPage />} />
+                <Route path="/terms" element={<TermsAndConditionsPage />} />
+            </Routes>
+        </BrowserRouter>
     );
-    
-    async function populateWeatherData() {
-        const response = await fetch('weatherforecast');
-        if (response.ok) {
-            const data = await response.json();
-            setForecasts(data);
-        }
-    }
 }
 
 export default App;

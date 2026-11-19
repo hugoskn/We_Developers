@@ -3,5 +3,7 @@
     <Build />
     <Deploy />
   </Project>
+  <Project Path="WeDevelopers.Infrastructure/WeDevelopers.Infrastructure.csproj" />
+  <Project Path="WeDevelopers.Repositories/WeDevelopers.Repositories.csproj" />
   <Project Path="WeDevelopers.Server/WeDevelopers.Server.csproj" />
 </Solution>

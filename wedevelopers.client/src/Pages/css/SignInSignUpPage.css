@@ -1,0 +1,415 @@
+/* ============================================================
+   WeDevelopers — Account Page
+   Dark industrial editorial — matches LandingPage design tokens
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Fira+Code:wght@300;400;500&family=Outfit:wght@300;400;500;600&display=swap');
+
+/* ── Root ── */
+.acc-root {
+    min-height: 100vh;
+    background: var(--bg, #080807);
+    color: var(--text, #eeeae3);
+    font-family: var(--font-body, 'Outfit', sans-serif);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ── Background grid ── */
+.acc-bg-grid {
+    position: fixed;
+    inset: 0;
+    background-image:
+        linear-gradient(var(--border, #1a1a17) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border, #1a1a17) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ── Wordmark ── */
+.acc-wordmark {
+    position: fixed;
+    top: 2rem;
+    left: 2.5rem;
+    display: flex;
+    gap: 0;
+    font-family: var(--font-display, 'Syne', sans-serif);
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+    z-index: 10;
+}
+.acc-wordmark__we  { color: var(--accent-bright, #f0b429); }
+.acc-wordmark__dev { color: var(--text, #eeeae3); }
+
+/* ── Main layout ── */
+.acc-main {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 440px;
+    padding: 1.5rem;
+}
+
+/* ── Card ── */
+.acc-card {
+    background: var(--bg-card, #111110);
+    border: 1px solid var(--border-bright, #252520);
+    border-radius: var(--radius-lg, 12px);
+    position: relative;
+    overflow: hidden;
+    animation: acc-card-in 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes acc-card-in {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* Decorative corner marks */
+.acc-card__corner {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    z-index: 2;
+    pointer-events: none;
+}
+.acc-card__corner--tl {
+    top: -1px; left: -1px;
+    border-top: 2px solid var(--accent-bright, #f0b429);
+    border-left: 2px solid var(--accent-bright, #f0b429);
+    border-radius: var(--radius-lg, 12px) 0 0 0;
+}
+.acc-card__corner--br {
+    bottom: -1px; right: -1px;
+    border-bottom: 2px solid var(--accent, #c9940f);
+    border-right: 2px solid var(--accent, #c9940f);
+    border-radius: 0 0 var(--radius-lg, 12px) 0;
+}
+
+/* ── Tabs ── */
+.acc-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    border-bottom: 1px solid var(--border, #1a1a17);
+}
+
+.acc-tabs__indicator {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 50%;
+    height: 2px;
+    background: var(--accent-bright, #f0b429);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.acc-tab {
+    background: none;
+    border: none;
+    color: var(--text-muted, #7c7870);
+    font-family: var(--font-mono, 'Fira Code', monospace);
+    font-size: 0.8rem;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    padding: 1rem 0;
+    cursor: pointer;
+    transition: color 0.2s;
+    text-transform: uppercase;
+}
+.acc-tab--active {
+    color: var(--text, #eeeae3);
+}
+.acc-tab:hover:not(.acc-tab--active) {
+    color: var(--text, #eeeae3);
+    opacity: 0.6;
+}
+
+/* ── Card body ── */
+.acc-card__body {
+    padding: 2rem 2rem 2rem;
+}
+
+/* ── Headline ── */
+.acc-headline {
+    margin-bottom: 1.75rem;
+}
+.acc-headline__tag {
+    display: block;
+    font-family: var(--font-mono, 'Fira Code', monospace);
+    font-size: 0.7rem;
+    color: var(--accent, #c9940f);
+    letter-spacing: 0.04em;
+    margin-bottom: 0.4rem;
+}
+.acc-headline__title {
+    font-family: var(--font-display, 'Syne', sans-serif);
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--text, #eeeae3);
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+}
+
+/* ── Form ── */
+.acc-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+}
+
+.acc-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.acc-field--confirm {
+    animation: acc-field-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes acc-field-in {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: none; }
+}
+
+.acc-label {
+    font-family: var(--font-mono, 'Fira Code', monospace);
+    font-size: 0.68rem;
+    color: var(--text-muted, #7c7870);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.acc-input {
+    background: var(--bg-elevated, #141412);
+    border: 1px solid var(--border-bright, #252520);
+    border-radius: var(--radius, 6px);
+    color: var(--text, #eeeae3);
+    font-family: var(--font-body, 'Outfit', sans-serif);
+    font-size: 0.95rem;
+    padding: 0.7rem 0.9rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+}
+.acc-input::placeholder {
+    color: var(--text-dim, #3e3e3a);
+}
+.acc-input:focus {
+    border-color: var(--accent, #c9940f);
+    box-shadow: 0 0 0 3px var(--accent-glow, rgba(240, 180, 41, 0.12));
+}
+
+/* ── Error ── */
+.acc-error {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    background: rgba(220, 60, 60, 0.08);
+    border: 1px solid rgba(220, 60, 60, 0.25);
+    border-radius: var(--radius, 6px);
+    padding: 0.65rem 0.85rem;
+    font-size: 0.85rem;
+    color: #e87070;
+    animation: acc-field-in 0.25s ease both;
+}
+.acc-error__icon {
+    font-family: var(--font-mono, 'Fira Code', monospace);
+    font-weight: 700;
+    font-size: 0.75rem;
+    background: rgba(220, 60, 60, 0.2);
+    color: #e87070;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+/* ── Submit button ── */
+.acc-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: var(--accent-bright, #f0b429);
+    color: #0a0800;
+    border: none;
+    border-radius: var(--radius, 6px);
+    font-family: var(--font-display, 'Syne', sans-serif);
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    padding: 0.85rem 1.5rem;
+    cursor: pointer;
+    margin-top: 0.25rem;
+    transition: background 0.2s, transform 0.15s, opacity 0.2s;
+    position: relative;
+    min-height: 48px;
+}
+.acc-submit:hover:not(:disabled) {
+    background: #ffc23a;
+    transform: translateY(-1px);
+}
+.acc-submit:active:not(:disabled) {
+    transform: translateY(0);
+}
+.acc-submit:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+.acc-submit__arrow {
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.acc-submit:hover .acc-submit__arrow {
+    transform: translateX(4px);
+}
+
+/* Spinner */
+.acc-submit__spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(10, 8, 0, 0.3);
+    border-top-color: #0a0800;
+    border-radius: 50%;
+    animation: acc-spin 0.7s linear infinite;
+}
+@keyframes acc-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ── Switch link ── */
+.acc-switch {
+    text-align: center;
+    font-size: 0.82rem;
+    color: var(--text-muted, #7c7870);
+    margin-top: 1.25rem;
+}
+.acc-switch__link {
+    background: none;
+    border: none;
+    color: var(--accent-bright, #f0b429);
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: opacity 0.2s;
+}
+.acc-switch__link:hover {
+    opacity: 0.75;
+}
+
+/* ── Success Modal ── */
+.acc-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(8, 8, 7, 0.85);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 1.5rem;
+    animation: acc-fade-in 0.25s ease both;
+}
+@keyframes acc-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.acc-modal {
+    background: var(--bg-elevated, #141412);
+    border: 1px solid var(--border-bright, #252520);
+    border-radius: var(--radius-lg, 12px);
+    padding: 2.5rem 2rem;
+    max-width: 360px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    animation: acc-modal-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes acc-modal-in {
+    from { opacity: 0; transform: scale(0.92) translateY(12px); }
+    to   { opacity: 1; transform: none; }
+}
+
+.acc-modal__icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--accent-glow, rgba(240, 180, 41, 0.12));
+    border: 1px solid var(--accent-dim, #7a5c0a);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.25rem;
+    color: var(--accent-bright, #f0b429);
+}
+.acc-modal__icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.acc-modal__title {
+    font-family: var(--font-display, 'Syne', sans-serif);
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--text, #eeeae3);
+    margin-bottom: 0.6rem;
+}
+
+.acc-modal__body {
+    font-size: 0.9rem;
+    color: var(--text-muted, #7c7870);
+    line-height: 1.65;
+    margin-bottom: 1.75rem;
+}
+
+.acc-modal__close {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--accent-bright, #f0b429);
+    color: #0a0800;
+    border: none;
+    border-radius: var(--radius, 6px);
+    font-family: var(--font-display, 'Syne', sans-serif);
+    font-size: 0.875rem;
+    font-weight: 700;
+    padding: 0.7rem 1.5rem;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+}
+.acc-modal__close:hover {
+    background: #ffc23a;
+    transform: translateY(-1px);
+}
+.acc-modal__close span {
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.acc-modal__close:hover span {
+    transform: translateX(3px);
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+    .acc-wordmark { top: 1.25rem; left: 1.25rem; }
+    .acc-card__body { padding: 1.5rem 1.25rem; }
+    .acc-headline__title { font-size: 1.5rem; }
+}
