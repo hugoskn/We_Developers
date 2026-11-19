@@ -1,0 +1,74 @@
+name: Build & Deploy
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'wedevelopers.client/**'
+      - 'WeDevelopers.Infrastructure/**'
+      - 'WeDevelopers.Repositories/**'
+      - 'WeDevelopers.Server/**'
+      - '.github/workflows/deploy.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '11.0.x'
+
+      - name: Publish
+        run: dotnet publish WeDevelopers.Server/WeDevelopers.Server.csproj -c Release -r win-x64 --self-contained -o publish
+
+      - name: Inject secrets into appsettings
+        shell: pwsh
+        env:
+          MONGODB_MAIN: ${{ secrets.ConnectionStrings__MongoDb_Main }}
+          JWT_SIGNING_KEY: ${{ secrets.Jwt__SigningKey }}
+          SMTP_HOST: ${{ secrets.SmtpSettings__Host }}
+          SMTP_KEY: ${{ secrets.SmtpSettings__Key }}
+        run: |
+          $missing = 'MONGODB_MAIN', 'JWT_SIGNING_KEY', 'SMTP_HOST', 'SMTP_KEY' | Where-Object { -not [Environment]::GetEnvironmentVariable($_) }
+          if ($missing) { throw "Missing GitHub secrets for: $($missing -join ', ')" }
+
+          $path = 'publish/appsettings.json'
+          $settings = Get-Content $path -Raw | ConvertFrom-Json -AsHashtable
+          $settings.ConnectionStrings.MongoDb_Main = $env:MONGODB_MAIN
+          $settings.Jwt.SigningKey = $env:JWT_SIGNING_KEY
+          $settings.SmtpSettings.Host = $env:SMTP_HOST
+          $settings.SmtpSettings.Key = $env:SMTP_KEY
+          $settings | ConvertTo-Json -Depth 100 | Set-Content $path -Encoding utf8
+
+      - name: Web Deploy to SmarterASP.NET
+        shell: pwsh
+        env:
+          WEBSITE_NAME: ${{ secrets.WEBSITE_NAME }}
+          SERVER_NAME: ${{ secrets.SERVER_NAME }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_PASS: ${{ secrets.DEPLOY_PASS }}
+        run: |
+          & "${env:ProgramFiles(x86)}\IIS\Microsoft Web Deploy V3\msdeploy.exe" `
+            -verb:sync `
+            -enableRule:AppOffline `
+            -enableRule:DoNotDeleteRule `
+            -useCheckSum `
+            -disableLink:AppPoolExtension `
+            -disableLink:ContentExtension `
+            -disableLink:CertificateExtension `
+            "-source:contentPath=$PWD\publish" `
+            "-dest:contentPath=$env:WEBSITE_NAME,computerName=https://${env:SERVER_NAME}:8172/msdeploy.axd?site=$env:WEBSITE_NAME,userName=$env:DEPLOY_USER,password=$env:DEPLOY_PASS,authType=Basic,includeAcls=False"
